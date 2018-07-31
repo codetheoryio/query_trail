@@ -1,6 +1,6 @@
 module QueryTrail
   class LogSubscriber < ActiveSupport::LogSubscriber
-    HEADER = "  ↳ \e[1m\e[34mQuery Trail:\e[0m "
+    HEADER = "  ↳ "
     IGNORE_PAYLOAD_NAMES = ActiveRecord::LogSubscriber::IGNORE_PAYLOAD_NAMES
 
     def sql(event)
@@ -10,7 +10,7 @@ module QueryTrail
 
       if backtrace = backtrace_cleaner.clean(caller).presence
         logger.debug HEADER + backtrace.shift
-        logger.debug backtrace.map { |line| ' ' * (HEADER.size - 13) + line }.join("\n")
+        logger.debug backtrace.map { |line| ' ' * (HEADER.size) + line }.join("\n")
       end
     end
 
