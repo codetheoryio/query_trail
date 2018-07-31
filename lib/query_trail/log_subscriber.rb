@@ -1,6 +1,6 @@
 module QueryTrail
   class LogSubscriber < ActiveSupport::LogSubscriber
-    HEADER = "  \e[1m\e[34mQuery Trail:\e[0m "
+    HEADER = "  ↳ \e[1m\e[34mQuery Trail:\e[0m "
     IGNORE_PAYLOAD_NAMES = ActiveRecord::LogSubscriber::IGNORE_PAYLOAD_NAMES
 
     def sql(event)
@@ -22,6 +22,7 @@ module QueryTrail
 
     def backtrace_cleaner
       @backtrace_cleaner ||= begin
+        require 'rails/backtrace_cleaner'
         backtrace_cleaner = Rails::BacktraceCleaner.new
         backtrace_cleaner.add_filter { |line| line.sub(/(app\/views.*:\d+):in.*/, '\1') }
         backtrace_cleaner
